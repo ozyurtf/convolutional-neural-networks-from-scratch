@@ -525,7 +525,7 @@ class DeepConvNet(object):
             # Input  (x) : N, F, H_conv_out, W_conv_out
             # Output     : N, F, H_maxpool_out, W_maxpool_out        
 
-        self.layers[f"conv{l}"] = FastConv()
+        self.layers[f"conv{l}"] = Conv()
 
         if self.batchnorm:
             self.layers[f"spatial_batchnorm{l}"] = SpatialBatchNorm()
@@ -541,11 +541,10 @@ class DeepConvNet(object):
         self.layers[f"relu{l}"] = ReLU()
 
         if l in self.max_pools:
-            self.layers[f"maxpool{l}"] = FastMaxPool()
+            self.layers[f"maxpool{l}"] = MaxPool()
 
         if weight_scale == "kaiming": 
-            weight_initializer = kaiming_initializer
-            self.params[f"W{l}"] = weight_initializer(Din = C, 
+            self.params[f"W{l}"] = kaiming_initializer(Din = C, 
                                                       Dout = F, 
                                                       K = HH, 
                                                       dtype = dtype,
@@ -569,7 +568,7 @@ class DeepConvNet(object):
 
     if weight_scale == "kaiming": 
 
-        self.params[f"W{self.num_layers-1}"] = weight_initializer(Din = num_classes, 
+        self.params[f"W{self.num_layers-1}"] = kaiming_initializer(Din = num_classes, 
                                                                   Dout = F * H_final * W_final, 
                                                                   device = device, 
                                                                   dtype = dtype)

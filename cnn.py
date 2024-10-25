@@ -97,7 +97,7 @@ class Conv(object):
 
         dx_padded = torch.zeros_like(x_padded, device=x.device)
         dw = torch.zeros_like(w, device=x.device)
-        db = dout.sum(dim=(0, 2, 3))  # Bias gradient db
+        db = dout.sum(dim=(0, 2, 3)) 
 
         for n in range(N):
             for i in range(H_out):
